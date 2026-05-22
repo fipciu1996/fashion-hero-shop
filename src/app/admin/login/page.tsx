@@ -28,7 +28,7 @@ export default function AdminLoginPage() {
         return;
       }
 
-      router.push("/admin/smoke-stats");
+      router.push("/admin/dashboard/report");
       router.refresh();
     } catch {
       setError("Blad logowania. Sprobuj ponownie.");

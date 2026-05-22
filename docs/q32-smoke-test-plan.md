@@ -9,21 +9,29 @@
 
 ## What we measure
 - Event: `smoke_cta_clicked`
-- Trigger: click on CTA `Uruchom promocje`
+- Trigger: click on CTA (`Uruchom promocje` or `Sprawdz estymacje promocji`)
+- Counting model: max 1 counted click per user (`fh_smoke_visitor` cookie)
 - Page: `/seller/promoted-listings-smoke`
 - Variant: `A` (`Uruchom promocje`) vs `B` (`Sprawdz estymacje promocji`)
 
 ## Decision thresholds
-- Success: 100 clicks in 3 days
-- Failure: below 100 clicks in 3 days
+- Success: 100 unique clicks in 3 days
+- Failure: below 100 unique clicks in 3 days
 
 ## Implementation in this repo
 - Landing page: `src/app/seller/promoted-listings-smoke/page.tsx`
 - CTA component: `src/app/seller/promoted-listings-smoke/smoke-test-cta.tsx`
 - Tracking endpoint: `src/app/api/smoke-click/route.ts`
+- Admin login page: `src/app/admin/login/page.tsx`
+- Admin dashboard: `src/app/admin/smoke-stats/page.tsx`
+- Admin stats API: `src/app/api/admin/smoke-stats/route.ts`
 
-## How to count after deploy (Vercel)
-1. Open Vercel project logs for production deployment.
-2. Filter logs by `fashionhero_smoke_test` or `smoke_cta_clicked`.
-3. Count matching log lines in the first 3 full days after launch.
-4. Compare with thresholds above and decide build/kill/iterate.
+## Admin access
+- URL login: `/admin/login`
+- URL dashboard: `/admin/dashboard/report`
+- Credentials: `admin/admin`
+
+## How to read results
+1. Open `/admin/smoke-stats` and log in as admin.
+2. Read `Unique clicks` as main KPI.
+3. Compare with threshold after 3 days.

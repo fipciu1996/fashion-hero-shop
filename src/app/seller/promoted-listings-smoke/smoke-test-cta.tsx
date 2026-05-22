@@ -47,17 +47,19 @@ export function SmokeTestCta() {
   return (
     <div>
       <button type="button" className="btn-cta w-full sm:w-auto" onClick={handleClick}>
-        {variant === "A" ? "Uruchom promocje" : "Sprawdz estymacje promocji"}
+        {variant === "A" ? "Launch promotion" : "Check promotion estimate"}
       </button>
       {status === "saved" && (
-        <p className="mt-2 text-[12px] text-green-700">Dzieki. Twoje zainteresowanie zostalo zapisane.</p>
+        <p className="mt-2 text-[12px] text-green-700">Thanks. Your interest has been recorded.</p>
       )}
       {status === "already" && (
-        <p className="mt-2 text-[12px] text-warm-gray">To klikniecie juz zostalo policzone dla tego uzytkownika.</p>
+        <p className="mt-2 text-[12px] text-warm-gray">
+          This click has already been counted for this user.
+        </p>
       )}
       {status === "error" && (
         <p className="mt-2 text-[12px] text-red-700">
-          Nie udalo sie zapisac klikniecia. Sprobuj ponownie za chwile.
+          We could not save your click. Please try again in a moment.
         </p>
       )}
     </div>

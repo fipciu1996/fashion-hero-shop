@@ -11,12 +11,31 @@ type SmokeClickBody = {
 };
 
 export async function POST(request: Request) {
-  let payload: SmokeClickBody = {};
+  let parsedJson: unknown;
 
   try {
-    payload = (await request.json()) as SmokeClickBody;
+    parsedJson = await request.json();
   } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  if (!parsedJson || typeof parsedJson !== "object" || Array.isArray(parsedJson)) {
+    return NextResponse.json({ error: "JSON body must be an object" }, { status: 400 });
+  }
+
+  const payload = parsedJson as SmokeClickBody;
+
+  if (payload.event !== undefined && typeof payload.event !== "string") {
+    return NextResponse.json({ error: "event must be a string" }, { status: 400 });
+  }
+  if (payload.target !== undefined && typeof payload.target !== "string") {
+    return NextResponse.json({ error: "target must be a string" }, { status: 400 });
+  }
+  if (payload.page !== undefined && typeof payload.page !== "string") {
+    return NextResponse.json({ error: "page must be a string" }, { status: 400 });
+  }
+  if (payload.variant !== undefined && typeof payload.variant !== "string") {
+    return NextResponse.json({ error: "variant must be a string" }, { status: 400 });
   }
 
   const cookieStore = await cookies();

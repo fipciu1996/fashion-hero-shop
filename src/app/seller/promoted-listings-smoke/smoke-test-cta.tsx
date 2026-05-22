@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 export function SmokeTestCta() {
   const [status, setStatus] = useState<"idle" | "saved" | "error" | "already">("idle");
   const [variant, setVariant] = useState<"A" | "B">("A");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const storageKey = "fh_smoke_variant";
@@ -21,6 +22,11 @@ export function SmokeTestCta() {
   }, []);
 
   const handleClick = async () => {
+    if (isSubmitting || status === "saved" || status === "already") {
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
       const response = await fetch("/api/smoke-click", {
         method: "POST",
@@ -41,13 +47,24 @@ export function SmokeTestCta() {
       setStatus(data.counted ? "saved" : "already");
     } catch {
       setStatus("error");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div>
-      <button type="button" className="btn-cta w-full sm:w-auto" onClick={handleClick}>
-        {variant === "A" ? "Launch promotion" : "Check promotion estimate"}
+      <button
+        type="button"
+        className="btn-cta w-full sm:w-auto disabled:cursor-not-allowed disabled:opacity-60"
+        onClick={handleClick}
+        disabled={isSubmitting || status === "saved" || status === "already"}
+      >
+        {isSubmitting
+          ? "Saving..."
+          : variant === "A"
+            ? "Launch promotion"
+            : "Check promotion estimate"}
       </button>
       {status === "saved" && (
         <p className="mt-2 text-[12px] text-green-700">Thanks. Your interest has been recorded.</p>

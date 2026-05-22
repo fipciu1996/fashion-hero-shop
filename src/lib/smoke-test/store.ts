@@ -21,14 +21,13 @@ export function registerSmokeClick(visitorId: string, variant: string) {
   const at = new Date().toISOString();
   const record: ClickRecord = { visitorId, variant: normalizedVariant, at };
 
-  state.events.unshift(record);
-  state.events = state.events.slice(0, 200);
-
   if (state.clicksByVisitor.has(visitorId)) {
     return { counted: false };
   }
 
   state.clicksByVisitor.set(visitorId, record);
+  state.events.unshift(record);
+  state.events = state.events.slice(0, 200);
   return { counted: true };
 }
 

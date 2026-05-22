@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 export function SmokeTestCta() {
-  const [status, setStatus] = useState<"idle" | "saved" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "saved" | "error" | "already">("idle");
   const [variant, setVariant] = useState<"A" | "B">("A");
 
   useEffect(() => {
@@ -37,7 +37,8 @@ export function SmokeTestCta() {
         throw new Error("Tracking failed");
       }
 
-      setStatus("saved");
+      const data = (await response.json()) as { counted?: boolean };
+      setStatus(data.counted ? "saved" : "already");
     } catch {
       setStatus("error");
     }
@@ -50,6 +51,9 @@ export function SmokeTestCta() {
       </button>
       {status === "saved" && (
         <p className="mt-2 text-[12px] text-green-700">Dzieki. Twoje zainteresowanie zostalo zapisane.</p>
+      )}
+      {status === "already" && (
+        <p className="mt-2 text-[12px] text-warm-gray">To klikniecie juz zostalo policzone dla tego uzytkownika.</p>
       )}
       {status === "error" && (
         <p className="mt-2 text-[12px] text-red-700">

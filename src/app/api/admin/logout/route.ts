@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { ADMIN_AUTH_COOKIE } from "@/lib/smoke-test/constants";
 
-export async function POST() {
-  const response = NextResponse.json({ ok: true }, { status: 200 });
+export async function POST(request: Request) {
+  const loginUrl = new URL("/admin/login", request.url);
+  const response = NextResponse.redirect(loginUrl, { status: 303 });
   response.cookies.set(ADMIN_AUTH_COOKIE, "", {
     httpOnly: true,
     sameSite: "lax",

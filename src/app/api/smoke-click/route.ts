@@ -8,6 +8,7 @@ type SmokeClickBody = {
   target?: string;
   page?: string;
   variant?: string;
+  visitorId?: string;
 };
 
 export async function POST(request: Request) {
@@ -37,9 +38,12 @@ export async function POST(request: Request) {
   if (payload.variant !== undefined && typeof payload.variant !== "string") {
     return NextResponse.json({ error: "variant must be a string" }, { status: 400 });
   }
+  if (payload.visitorId !== undefined && typeof payload.visitorId !== "string") {
+    return NextResponse.json({ error: "visitorId must be a string" }, { status: 400 });
+  }
 
   const cookieStore = await cookies();
-  let visitorId = cookieStore.get(SMOKE_VISITOR_COOKIE)?.value;
+  let visitorId = cookieStore.get(SMOKE_VISITOR_COOKIE)?.value || payload.visitorId?.trim();
   let mustSetVisitorCookie = false;
 
   if (!visitorId) {

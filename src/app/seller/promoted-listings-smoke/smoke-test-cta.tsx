@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { SMOKE_VISITOR_STORAGE_KEY, makeVisitorId } from "@/lib/smoke-test/constants";
 
 export function SmokeTestCta() {
   const [status, setStatus] = useState<"idle" | "saved" | "error" | "already">("idle");
   const [variant, setVariant] = useState<"A" | "B">("A");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [visitorId, setVisitorId] = useState("");
 
   useEffect(() => {
     const storageKey = "fh_smoke_variant";
@@ -21,8 +23,20 @@ export function SmokeTestCta() {
     setVariant(assigned);
   }, []);
 
+  useEffect(() => {
+    const existing = window.localStorage.getItem(SMOKE_VISITOR_STORAGE_KEY);
+    if (existing) {
+      setVisitorId(existing);
+      return;
+    }
+
+    const generated = makeVisitorId();
+    window.localStorage.setItem(SMOKE_VISITOR_STORAGE_KEY, generated);
+    setVisitorId(generated);
+  }, []);
+
   const handleClick = async () => {
-    if (isSubmitting || status === "saved" || status === "already") {
+    if (isSubmitting || status === "saved" || status === "already" || !visitorId) {
       return;
     }
 
@@ -36,6 +50,7 @@ export function SmokeTestCta() {
           target: "uruchom_promocje",
           page: "/seller/promoted-listings-smoke",
           variant,
+          visitorId,
         }),
       });
 
@@ -58,7 +73,7 @@ export function SmokeTestCta() {
         type="button"
         className="btn-cta w-full sm:w-auto disabled:cursor-not-allowed disabled:opacity-60"
         onClick={handleClick}
-        disabled={isSubmitting || status === "saved" || status === "already"}
+        disabled={isSubmitting || status === "saved" || status === "already" || !visitorId}
       >
         {isSubmitting
           ? "Saving..."

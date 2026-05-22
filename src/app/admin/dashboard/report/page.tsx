@@ -15,7 +15,7 @@ export default async function AdminSmokeStatsPage() {
     redirect("/admin/login");
   }
 
-  const stats = getSmokeStats();
+  const stats = await getSmokeStats();
 
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6">

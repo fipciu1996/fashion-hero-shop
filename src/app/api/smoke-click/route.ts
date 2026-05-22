@@ -52,7 +52,7 @@ export async function POST(request: Request) {
   const page = payload.page ?? "unknown";
   const variant = payload.variant ?? "unknown";
 
-  const result = registerSmokeClick(visitorId, variant);
+  const result = await registerSmokeClick(visitorId, variant);
 
   console.log(
     JSON.stringify({

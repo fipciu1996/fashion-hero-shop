@@ -1,9 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function SmokeTestCta() {
   const [status, setStatus] = useState<"idle" | "saved" | "error">("idle");
+  const [variant, setVariant] = useState<"A" | "B">("A");
+
+  useEffect(() => {
+    const storageKey = "fh_smoke_variant";
+    const existing = window.localStorage.getItem(storageKey);
+
+    if (existing === "A" || existing === "B") {
+      setVariant(existing);
+      return;
+    }
+
+    const assigned = Math.random() < 0.5 ? "A" : "B";
+    window.localStorage.setItem(storageKey, assigned);
+    setVariant(assigned);
+  }, []);
 
   const handleClick = async () => {
     try {
@@ -14,6 +29,7 @@ export function SmokeTestCta() {
           event: "smoke_cta_clicked",
           target: "uruchom_promocje",
           page: "/seller/promoted-listings-smoke",
+          variant,
         }),
       });
 
@@ -30,7 +46,7 @@ export function SmokeTestCta() {
   return (
     <div>
       <button type="button" className="btn-cta w-full sm:w-auto" onClick={handleClick}>
-        Uruchom promocje
+        {variant === "A" ? "Uruchom promocje" : "Sprawdz estymacje promocji"}
       </button>
       {status === "saved" && (
         <p className="mt-2 text-[12px] text-green-700">Dzieki. Twoje zainteresowanie zostalo zapisane.</p>

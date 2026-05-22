@@ -4,6 +4,7 @@ type SmokeClickBody = {
   event?: string;
   target?: string;
   page?: string;
+  variant?: string;
 };
 
 export async function POST(request: Request) {
@@ -18,6 +19,7 @@ export async function POST(request: Request) {
   const eventName = payload.event ?? "smoke_cta_clicked";
   const target = payload.target ?? "unknown";
   const page = payload.page ?? "unknown";
+  const variant = payload.variant ?? "unknown";
 
   console.log(
     JSON.stringify({
@@ -25,6 +27,7 @@ export async function POST(request: Request) {
       event: eventName,
       target,
       page,
+      variant,
       at: new Date().toISOString(),
     })
   );

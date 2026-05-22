@@ -11,6 +11,7 @@
 - Event: `smoke_cta_clicked`
 - Trigger: click on CTA `Uruchom promocje`
 - Page: `/seller/promoted-listings-smoke`
+- Variant: `A` (`Uruchom promocje`) vs `B` (`Sprawdz estymacje promocji`)
 
 ## Decision thresholds
 - Success: 100 clicks in 3 days
